@@ -1,5 +1,4 @@
-const SUPABASE_URL = 'https://oqmomudrplcxgldbrwvl.supabase.co';
-// He usado la clave 'anon public' (JWT) para asegurar la compatibilidad máxima
+const SUPABASE_URL = 'https://oqmomudrplcxgldbrwvl.supabase.co'; 
 const SUPABASE_KEY = 'sb_publishable_oVFMjR0Upwl6IXV3yD9c7Q_DAFcaphz';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -310,10 +309,5 @@ class AndradeApp {
         sb.channel('public:warriors').on('postgres_changes', { event: '*', schema: 'public', table: 'warriors' }, () => this.renderLeaderboard()).subscribe();
     }
 }
-
-const app = new AndradeApp();
-
-`;
-document.head.appendChild(style);
 
 const app = new AndradeApp();
