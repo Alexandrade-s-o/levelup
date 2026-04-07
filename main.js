@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://oqmomudrplcxgldbrwvl.supabase.co'; 
-const SUPABASE_KEY = 'sb_publishable_oVFMjR0Upwl6IXV3yD9c7Q_DAFcaphz';
+const SUPABASE_KEY = 'sb_publishable_oVFMjR0Upwl6IXV3yD9c7Q_DAFcaphz
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 class AndradeApp {
