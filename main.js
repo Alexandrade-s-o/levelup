@@ -1,5 +1,5 @@
-const SUPABASE_URL = 'https://oqmomudrplcxgldbrwvl.supabase.co'; 
-const SUPABASE_KEY = 'sb_publishable_oVFMjR0Upwl6IXV3yD9c7Q_DAFcaphz
+const SUPABASE_URL = 'https://oqmomudrplcxgldbrwvl.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_oVFMjR0Upwl6IXV3yD9c7Q_DAFcaphz';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 class AndradeApp {
@@ -42,11 +42,11 @@ class AndradeApp {
 
     async initSession() {
         console.log("🚀 ANDRADE PRO: Iniciando sesión para:", this.uid);
-        
+
         // MOSTRAR APP DE INMEDIATO (UX fluida)
         this.els.app.classList.remove('hidden');
         this.els.auth.classList.add('hidden');
-        
+
         this.loadLocalState();
         this.setupHandlers();
         this.updateDate();
@@ -60,7 +60,7 @@ class AndradeApp {
             console.warn("⚠️ Offline Mode:", e.message);
         }
 
-        try { this.syncRealtime(); } catch(e) {}
+        try { this.syncRealtime(); } catch (e) { }
     }
 
     loadLocalState() {
@@ -82,7 +82,7 @@ class AndradeApp {
         };
 
         this.state = { ...defaults, ...localRaw };
-        
+
         // Si no hay datos guardados previos, asegurar que se carguen los defaults
         if (!localRaw.habits || localRaw.habits.length === 0 && this.state.xp === 0) {
             this.state.habits = defaults.habits;
@@ -131,7 +131,7 @@ class AndradeApp {
         this.$('sidebar-name').innerText = this.uid;
         this.$('topbar-level-val').innerText = `Nivel ${s.level}`;
         this.$('topbar-xp-total').innerText = s.xp.toLocaleString();
-        
+
         this.$('dash-xp').innerText = s.xp.toLocaleString();
         this.$('dash-streak').innerText = s.streak;
 
@@ -197,13 +197,13 @@ class AndradeApp {
         await this.save();
     }
 
-    async delGoal(i) { if(confirm('¿Eliminar?')) { this.state.goals.splice(i, 1); await this.save(); } }
+    async delGoal(i) { if (confirm('¿Eliminar?')) { this.state.goals.splice(i, 1); await this.save(); } }
 
     awardXP(val) {
         this.state.xp = Math.max(0, this.state.xp + val);
         const newLvl = Math.floor(this.state.xp / 1000) + 1;
         if (newLvl > this.state.level) { this.state.level = newLvl; this.notify(`🌟 NIVEL ${newLvl}`); }
-        if(val > 0) this.showXPPop(val);
+        if (val > 0) this.showXPPop(val);
     }
 
     openModal(type) {
@@ -245,7 +245,7 @@ class AndradeApp {
     async save(onlyLocal = false) {
         localStorage.setItem(`and_data_${this.uid}`, JSON.stringify(this.state));
         this.renderAll();
-        if (!onlyLocal) { try { await this.saveRemote(); } catch(e) {} }
+        if (!onlyLocal) { try { await this.saveRemote(); } catch (e) { } }
     }
 
     async saveRemote() {
@@ -277,7 +277,7 @@ class AndradeApp {
         try {
             const { data } = await sb.from('warriors').select('*');
             if (data) warriors = data.sort((a, b) => (b.state_json.xp || 0) - (a.state_json.xp || 0)).slice(0, 5);
-        } catch (e) {}
+        } catch (e) { }
 
         c.innerHTML = `<div class="leader-header"><span>GUERRERO</span><span>XP TOTAL</span></div>`;
         if (warriors.length === 0) { c.innerHTML += `<div class="leader-row current">👤 ${this.uid} (Tú) · ${this.state.xp} XP</div>`; return; }
