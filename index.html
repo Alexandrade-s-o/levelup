@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>LEVEL UP | Forja tu Leyenda</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0b07;--panel:#16120c;--panel-hover:#1e1914;--panel-solid:#0f0c08;--accent:#d4a017;--accent-glow:rgba(212,160,23,.2);--secondary:#8b6914;--text:#e8dcc8;--text-muted:#8a7e6a;--border:#2a2318;--radius-lg:12px;--radius-md:8px;--radius-sm:4px;--font-main:'Crimson Text',Georgia,serif;--font-heading:'Cinzel',serif;--transition:all .3s cubic-bezier(.25,1,.5,1);--sidebar-w:260px;--str:#c0392b;--end:#27ae60;--int:#2980b9;--agi:#f39c12}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-main);background:var(--bg);color:var(--text);overflow:hidden;height:100vh;background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h60v60H0z' fill='none'/%3E%3Cpath d='M30 0v60M0 30h60' stroke='%23ffffff' stroke-opacity='.02' stroke-width='.5'/%3E%3C/svg%3E")}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.auth-view{position:fixed;inset:0;background:rgba(13,11,7,.97);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;z-index:5000;padding:24px}
+.auth-box{background:linear-gradient(180deg,#1a1610,#12100a);border:2px solid var(--accent);padding:3.5rem 3rem;border-radius:var(--radius-lg);width:100%;max-width:420px;text-align:center;box-shadow:0 0 40px rgba(212,160,23,.1),0 20px 40px rgba(0,0,0,.8)}
+.logo-icon{font-size:2.5rem;margin-bottom:1.5rem;display:inline-block;color:var(--accent);text-shadow:0 0 20px rgba(212,160,23,.4)}
+.auth-title{font-family:var(--font-heading);font-size:1.6rem;font-weight:800;margin-bottom:.5rem;color:var(--accent);letter-spacing:2px;text-transform:uppercase}
+.auth-subtitle{color:var(--text-muted);font-size:.95rem;margin-bottom:2.5rem;font-style:italic}
+.auth-form input{width:100%;background:var(--bg);border:2px solid var(--border);padding:1.1rem;border-radius:var(--radius-md);color:var(--text);font-family:var(--font-heading);font-size:1rem;text-align:center;margin-bottom:1rem;transition:var(--transition);letter-spacing:1px}
+.auth-form input:focus{border-color:var(--accent);box-shadow:0 0 12px var(--accent-glow);outline:none}
+.btn-primary{background:linear-gradient(180deg,#c9960c,#8b6914);color:#0d0b07;border:1px solid var(--accent);padding:1.1rem;border-radius:var(--radius-md);font-family:var(--font-heading);font-weight:700;cursor:pointer;width:100%;transition:var(--transition);letter-spacing:1px;text-transform:uppercase;font-size:.85rem;text-shadow:0 1px 0 rgba(255,255,255,.2)}
+.btn-primary:hover{transform:translateY(-2px);background:linear-gradient(180deg,#d4a017,#a07a18);box-shadow:0 4px 16px rgba(212,160,23,.3)}
+.btn-ghost{background:transparent;color:var(--text-muted);border:1px solid var(--border);padding:.6rem 1rem;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);font-size:.85rem;font-family:var(--font-main)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-pro-add{background:transparent;color:var(--accent);border:1px solid var(--accent);width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);font-weight:700}
+.btn-pro-add:hover{background:var(--accent);color:var(--bg)}
+.app-shell{display:grid;grid-template-columns:var(--sidebar-w) 1fr;height:100vh}
+.sidebar{background:linear-gradient(180deg,#12100a,#0a0907);border-right:2px solid var(--border);padding:2.5rem 1.5rem;display:flex;flex-direction:column;gap:2.5rem}
+.sidebar-logo{display:flex;align-items:center;gap:12px;padding-left:10px}
+.sidebar-logo .logo-icon{margin:0;font-size:1.5rem}
+.sidebar-logo .logo-text{font-weight:800;letter-spacing:2px;font-family:var(--font-heading);color:var(--accent);font-size:.9rem}
+.sidebar-user{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--radius-md);border:1px solid var(--border)}
+#sidebar-avatar{width:44px;height:44px;border-radius:50%;background:var(--panel);border:1px solid var(--border);object-fit:cover}
+#sidebar-name{font-weight:600;font-size:.95rem}
+#sidebar-rank{font-size:.7rem;color:var(--text-muted);letter-spacing:.5px;margin-top:2px}
+.main-content{overflow-y:auto;padding:2.5rem 3.5rem;scroll-behavior:smooth;padding-bottom:6rem}
+.nav-item{display:flex;align-items:center;gap:1rem;padding:.85rem 1.2rem;border-radius:var(--radius-md);color:var(--text-muted);text-decoration:none;font-weight:500;transition:var(--transition);font-size:.95rem;margin-bottom:4px}
+.nav-item svg{width:20px;transition:var(--transition)}
+.nav-item:hover{background:var(--panel-hover);color:var(--text)}
+.nav-item.active{color:var(--accent);background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.3)}
+.nav-item.active svg{color:var(--accent)}
+.topbar-pro{display:flex;justify-content:space-between;align-items:center;margin-bottom:3rem}
+#greeting{font-family:var(--font-heading);font-size:1.8rem;font-weight:700;color:var(--accent);text-shadow:0 2px 8px rgba(212,160,23,.15)}
+#current-date{color:var(--text-muted);font-size:.85rem;margin-top:4px;letter-spacing:1px}
+.xp-badge{display:flex;align-items:center;gap:1rem;background:var(--panel);padding:.6rem 1.2rem;border-radius:var(--radius-md);border:1px solid var(--border)}
+.xp-avatar-container{position:relative;width:44px;height:44px}
+.xp-progress-ring{transform:rotate(-90deg);width:44px;height:44px}
+.ring-bg{stroke:var(--border)}.ring-fill{stroke:var(--accent);transition:stroke-dasharray 1s ease}
+#topbar-avatar{position:absolute;inset:4px;width:36px;height:36px;border-radius:50%;object-fit:cover}
+.level-tag{font-size:.8rem;color:var(--text-muted)}
+#topbar-name{font-weight:600;font-size:.9rem}
+.card{background:linear-gradient(180deg,#18140e,#110e09);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.8rem;animation:fade-in-up .5s cubic-bezier(.2,.8,.2,1) both;box-shadow:0 4px 20px rgba(0,0,0,.3)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:.8rem}
+.card-header h3{font-size:.9rem;font-weight:700;color:var(--accent);font-family:var(--font-heading);letter-spacing:1px;text-transform:uppercase}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:1.5rem}
+.main-layout{display:grid;grid-template-columns:1fr 380px;gap:1.5rem}
+.stat-card{display:flex;flex-direction:column;justify-content:center}
+.stat-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:1px;margin-bottom:.8rem;text-transform:uppercase;font-family:var(--font-heading)}
+.stat-value{font-family:var(--font-heading);font-size:2rem;font-weight:700;color:var(--accent)}
+.stat-value span{color:var(--text)}
+.empty-state{color:var(--text-muted);font-size:.9rem;text-align:center;padding:2rem 0}
+.habit-item{display:flex;align-items:center;gap:1rem;padding:1rem;border-radius:var(--radius-md);margin-bottom:8px;background:var(--bg);border:1px solid var(--border);cursor:pointer;transition:var(--transition)}
+.habit-item:hover{border-color:var(--accent);background:rgba(212,160,23,.03)}
+.habit-item.done{opacity:.45}.habit-item.done .habit-name{text-decoration:line-through;color:var(--text-muted)}
+.habit-item.done .habit-check{background:var(--accent);border-color:var(--accent)}
+.habit-check{width:22px;height:22px;border:2px solid var(--border);border-radius:4px;transition:var(--transition);flex-shrink:0}
+.habit-name{font-weight:600;font-size:.95rem}
+.habit-det{font-size:.8rem;color:var(--text-muted);margin-top:2px}
+.goal-pro-card{padding:1.2rem;border-radius:var(--radius-md);background:var(--bg);border:1px solid var(--border);margin-bottom:12px}
+.progress-bg{height:4px;background:var(--border);border-radius:4px;margin:10px 0;overflow:hidden}
+.progress-bar{height:100%;background:var(--text);transition:width .8s cubic-bezier(.2,.8,.2,1)}
+
+/* CHARACTER */
+.char-top{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+.char-display{display:flex;flex-direction:column;align-items:center;gap:1rem}
+.char-avatar-frame{width:220px;height:280px;border-radius:var(--radius-lg);background:radial-gradient(ellipse at 50% 80%,#1a1610 0%,#0a0907 100%);border:2px solid var(--accent);overflow:hidden;position:relative;display:flex;align-items:flex-end;justify-content:center;box-shadow:0 0 30px rgba(212,160,23,.1),inset 0 0 40px rgba(0,0,0,.5)}
+.char-avatar-frame img{width:100%;height:100%;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
+.char-meta{text-align:center}
+.char-skin-name{font-family:var(--font-heading);font-weight:700;font-size:1.1rem;margin-bottom:4px;color:var(--accent)}
+.coin-pill{width:fit-content;border:1px solid rgba(212,160,23,.4);background:rgba(212,160,23,.08);border-radius:999px;padding:.25rem .75rem;font-size:.8rem;font-weight:600;margin:0 auto;color:var(--accent)}
+.power-wrap{text-align:center;margin-top:.5rem}
+.power-val{font-family:var(--font-heading);font-size:2.2rem;font-weight:800;color:var(--accent);text-shadow:0 0 20px rgba(212,160,23,.3)}
+.power-label{font-size:.7rem;color:var(--text-muted);letter-spacing:1px;text-transform:uppercase}
+
+/* STATS */
+.stats-list{display:flex;flex-direction:column;gap:.9rem}
+.stat-row{display:flex;align-items:center;gap:.7rem}
+.stat-row .s-name{font-size:.8rem;font-weight:600;width:36px;color:var(--text-muted)}
+.stat-bar-wrap{flex:1;height:10px;background:var(--bg);border-radius:6px;overflow:hidden;border:1px solid var(--border)}
+.stat-bar-fill{height:100%;border-radius:6px;transition:width .6s ease}
+.stat-bar-fill.str{background:var(--str)}.stat-bar-fill.end{background:var(--end)}.stat-bar-fill.int{background:var(--int)}.stat-bar-fill.agi{background:var(--agi)}
+.stat-row .s-val{font-weight:700;font-size:.85rem;width:55px;text-align:right}
+.stat-add{width:26px;height:26px;border-radius:50%;background:transparent;border:1px solid var(--border);color:var(--text-muted);cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.stat-add:hover:not(:disabled){background:linear-gradient(180deg,#c9960c,#8b6914);color:var(--bg);border-color:var(--accent)}
+.stat-add:disabled{opacity:.2;cursor:not-allowed}
+.sp-info{margin-top:1.2rem;padding:.7rem 1rem;background:var(--bg);border-radius:var(--radius-sm);border:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+.sp-val{font-weight:700;color:var(--accent);font-size:1.1rem}
+
+/* SKIN SHOP */
+.skin-shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem}
+.skin-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;transition:var(--transition);display:flex;flex-direction:column}
+.skin-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 4px 16px rgba(212,160,23,.1)}
+.skin-card.equipped{border-color:var(--accent);box-shadow:0 0 20px rgba(212,160,23,.15)}
+.skin-card .skin-img-wrap{height:200px;background:radial-gradient(ellipse at 50% 80%,#1a1610 0%,#080604 100%);display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.skin-card .skin-img-wrap img{height:90%;object-fit:contain;filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+.skin-card .skin-info{padding:.8rem;display:flex;flex-direction:column;gap:.4rem}
+.skin-card .sk-name{font-weight:700;font-size:.9rem}
+.skin-card .sk-stats{font-size:.7rem;color:var(--text-muted)}
+.skin-card .sk-btn{padding:.5rem;border-radius:var(--radius-sm);font-size:.78rem;font-weight:600;cursor:pointer;transition:var(--transition);border:1px solid var(--border);background:transparent;color:var(--text-muted);text-align:center;width:100%}
+.skin-card .sk-btn:hover:not(:disabled){border-color:var(--text);color:var(--text)}
+.skin-card .sk-btn.buy{background:linear-gradient(180deg,#c9960c,#8b6914);color:#0d0b07;border-color:var(--accent);font-family:var(--font-heading);letter-spacing:.5px}
+.skin-card .sk-btn.buy:hover{background:linear-gradient(180deg,#d4a017,#a07a18);box-shadow:0 2px 12px rgba(212,160,23,.3)}
+.skin-card .sk-btn.active{border-color:var(--accent);color:var(--accent)}
+.skin-card .sk-btn:disabled{opacity:.35;cursor:not-allowed}
+
+/* LEADERBOARD & CHARTS */
+.leader-header{display:flex;justify-content:space-between;padding:0 10px 10px 10px;border-bottom:1px solid var(--border);font-size:.75rem;color:var(--text-muted);font-weight:600;margin-bottom:10px}
+.leader-row{display:flex;align-items:center;gap:1rem;padding:14px 12px;border-radius:var(--radius-md);margin-bottom:6px;background:var(--bg);border:1px solid transparent;transition:var(--transition)}
+.leader-row:hover{border-color:var(--border)}
+.leader-row.current{border-color:var(--accent);background:rgba(212,160,23,.05)}
+.leader-rank{font-family:var(--font-heading);font-size:1.3rem;font-weight:800;width:32px;text-align:center;color:var(--text-muted)}
+.leader-rank.top1{color:#f4d03f}.leader-rank.top2{color:#c0c0c0}.leader-rank.top3{color:#cd7f32}
+.leader-avatar{width:50px;height:50px;border-radius:12px;object-fit:cover;background:radial-gradient(ellipse,#1a1a2e,#0a0a0f);border:1px solid var(--border);flex-shrink:0}
+.leader-info{flex:1;min-width:0}
+.leader-name{font-weight:700;font-size:.95rem;margin-bottom:2px}
+.leader-skin{font-size:.7rem;color:var(--text-muted);margin-bottom:4px}
+.leader-stats-row{display:flex;gap:6px;flex-wrap:wrap}
+.leader-stat{font-size:.65rem;padding:2px 6px;border-radius:4px;font-weight:600;border:1px solid var(--border);background:var(--panel)}
+.leader-stat.s-str{color:var(--str);border-color:rgba(239,68,68,.3)}
+.leader-stat.s-end{color:var(--end);border-color:rgba(34,197,94,.3)}
+.leader-stat.s-int{color:var(--int);border-color:rgba(59,130,246,.3)}
+.leader-stat.s-agi{color:var(--agi);border-color:rgba(234,179,8,.3)}
+.leader-right{text-align:right;flex-shrink:0}
+.leader-xp{font-family:var(--font-heading);font-weight:700;font-size:1rem}
+.leader-level{font-size:.7rem;color:var(--text-muted);margin-top:2px}
+.right-stack{display:flex;flex-direction:column;gap:1.5rem}
+#chart-bars{display:flex;align-items:flex-end;gap:8px;height:120px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.chart-bar-pro{flex:1;background:var(--text-muted);border-radius:4px 4px 0 0;transition:height 1s ease,background .3s}
+.chart-bar-pro:hover{background:var(--text)}
+.chart-labels{display:flex;justify-content:space-between;padding-top:8px;font-size:.75rem;color:var(--text-muted)}
+.toast{position:fixed;bottom:100px;left:50%;transform:translate(-50%,20px);background:linear-gradient(180deg,#c9960c,#8b6914);color:#0d0b07;padding:12px 24px;border-radius:var(--radius-md);font-weight:700;font-size:.9rem;opacity:0;transition:var(--transition);z-index:6000;pointer-events:none;font-family:var(--font-heading);letter-spacing:.5px;border:1px solid rgba(255,255,255,.2);box-shadow:0 4px 20px rgba(212,160,23,.3)}
+.toast.active{opacity:1;transform:translate(-50%,0)}
+.glass-modal{max-width:440px;text-align:left;padding:2.5rem}
+.glass-modal .card-header{margin-bottom:2rem}
+.glass-modal .card-header h3{color:var(--text);font-size:1.2rem}
+.form-field{margin-bottom:1.5rem}
+.form-field label{display:block;font-size:.85rem;color:var(--text-muted);margin-bottom:8px}
+.xp-pop-pro{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-heading);font-size:2.5rem;font-weight:900;color:var(--accent);text-shadow:0 0 30px rgba(212,160,23,.5),0 2px 4px rgba(0,0,0,.8);pointer-events:none;animation:xp-pop .8s ease-out forwards;z-index:7000}
+@keyframes xp-pop{0%{opacity:1;transform:translate(-50%,-50%) scale(.5)}50%{opacity:1;transform:translate(-50%,-70%) scale(1.2)}100%{opacity:0;transform:translate(-50%,-90%) scale(1)}}
+.mobile-nav-dock{display:none}
+@media(max-width:1024px){.app-shell{grid-template-columns:80px 1fr}.sidebar-logo .logo-text,.nav-item span,.sidebar-user div{display:none}.sidebar{padding:2rem .5rem;align-items:center}.nav-item{padding:1rem;justify-content:center}.sidebar-user{border:none;background:transparent;padding:4px}.main-layout,.char-top{grid-template-columns:1fr}}
+@media(max-width:768px){.app-shell{display:block}.sidebar{display:none}.main-content{padding:1.5rem;height:calc(100vh - 80px)}.topbar-pro{flex-direction:column;align-items:flex-start;gap:1rem}.mobile-nav-dock{display:flex;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);width:95%;max-width:420px;height:64px;background:rgba(9,9,11,.85);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:32px;justify-content:space-evenly;align-items:center;padding:0 .5rem;z-index:4000}.dock-item{color:var(--text-muted);width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:var(--transition)}.dock-item.active{color:var(--text);background:var(--bg);border:1px solid var(--border)}.dock-item svg{width:20px;height:20px}.char-top{grid-template-columns:1fr}.char-avatar-frame{width:180px;height:230px}.skin-shop-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}.skin-card .skin-img-wrap{height:160px}}
+@keyframes fade-in-up{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
+.hidden{display:none !important}
+
+/* INTRO CINEMATIC */
+#intro-screen{position:fixed;inset:0;background:#000;z-index:9000;display:flex;align-items:center;justify-content:center;opacity:1;transition:opacity 1s ease}
+#intro-screen.fade-out{opacity:0;pointer-events:none}
+.intro-content{max-width:600px;text-align:center;padding:2rem}
+.intro-content .intro-icon{font-size:4rem;animation:pulse-glow 2s ease-in-out infinite}
+.intro-content .intro-title{font-family:var(--font-heading);font-size:2.5rem;font-weight:900;color:var(--accent);margin:1.5rem 0 1rem;letter-spacing:3px;text-shadow:0 0 40px rgba(212,160,23,.4);opacity:0;animation:intro-fade 1s .5s forwards}
+.intro-content .intro-lore{font-family:var(--font-main);font-size:1.05rem;color:var(--text-muted);line-height:1.8;font-style:italic;opacity:0;animation:intro-fade 1.2s 1.2s forwards}
+.intro-content .intro-lore span{display:block;margin-bottom:.8rem;opacity:0;animation:intro-line 1s forwards}
+.intro-content .intro-lore span:nth-child(1){animation-delay:1.5s}
+.intro-content .intro-lore span:nth-child(2){animation-delay:3s}
+.intro-content .intro-lore span:nth-child(3){animation-delay:4.5s}
+.intro-content .intro-lore span:nth-child(4){animation-delay:6s}
+.intro-skip{margin-top:2.5rem;opacity:0;animation:intro-fade 1s 7s forwards}
+.intro-skip button{background:transparent;border:1px solid var(--accent);color:var(--accent);padding:.7rem 2rem;border-radius:var(--radius-md);font-family:var(--font-heading);font-weight:700;cursor:pointer;letter-spacing:1px;transition:var(--transition)}
+.intro-skip button:hover{background:var(--accent);color:#000}
+@keyframes pulse-glow{0%,100%{transform:scale(1);filter:drop-shadow(0 0 10px rgba(212,160,23,.3))}50%{transform:scale(1.1);filter:drop-shadow(0 0 30px rgba(212,160,23,.6))}}
+@keyframes intro-fade{to{opacity:1}}
+@keyframes intro-line{to{opacity:1}}
+
+/* PVP ARENA */
+.arena-layout{display:flex;flex-direction:column;gap:1.5rem}
+.arena-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:1.5rem;align-items:center}
+.arena-fighter{text-align:center}
+.arena-fighter img{width:140px;height:180px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(0,0,0,.6));margin-bottom:.8rem}
+.arena-fighter .af-name{font-family:var(--font-heading);font-weight:700;font-size:1rem;margin-bottom:.3rem}
+.arena-fighter .af-skin{font-size:.75rem;color:var(--text-muted)}
+.arena-fighter .af-power{font-family:var(--font-heading);font-size:1.4rem;font-weight:800;color:var(--accent);margin-top:.3rem}
+.arena-vs-icon{font-size:2.5rem;color:var(--accent);font-family:var(--font-heading);font-weight:900;text-shadow:0 0 20px rgba(212,160,23,.4)}
+.arena-log{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;max-height:250px;overflow-y:auto;font-size:.85rem;line-height:1.8}
+.arena-log .log-line{padding:4px 0;border-bottom:1px solid rgba(42,35,24,.4)}
+.arena-log .log-hit{color:var(--str)}.arena-log .log-miss{color:var(--text-muted)}.arena-log .log-crit{color:var(--accent);font-weight:700}
+.arena-log .log-win{color:var(--accent);font-family:var(--font-heading);font-weight:700;font-size:1.1rem;text-align:center;padding:1rem 0}
+.arena-log .log-lose{color:var(--str);font-family:var(--font-heading);font-weight:700;font-size:1.1rem;text-align:center;padding:1rem 0}
+.arena-rewards{text-align:center;padding:1rem;background:rgba(212,160,23,.05);border:1px solid rgba(212,160,23,.2);border-radius:var(--radius-md);margin-top:.5rem;font-family:var(--font-heading)}
+.arena-rivals-list{display:flex;flex-direction:column;gap:.7rem}
+.rival-card{display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);cursor:pointer;transition:var(--transition)}
+.rival-card:hover{border-color:var(--accent);background:rgba(212,160,23,.03);transform:translateX(4px)}
+.rival-card img{width:56px;height:70px;object-fit:contain;border-radius:var(--radius-sm);flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.rival-card .rv-info{flex:1;min-width:0}
+.rival-card .rv-name{font-family:var(--font-heading);font-weight:700;font-size:.95rem;margin-bottom:2px}
+.rival-card .rv-skin{font-size:.72rem;color:var(--text-muted);margin-bottom:4px}
+.rival-card .rv-stats-row{display:flex;gap:5px;flex-wrap:wrap}
+.rival-card .rv-stat{font-size:.62rem;padding:1px 5px;border-radius:3px;font-weight:600;border:1px solid var(--border);background:var(--panel)}
+.rival-card .rv-right{text-align:right;flex-shrink:0}
+.rival-card .rv-hp{font-family:var(--font-heading);font-weight:700;font-size:.85rem;color:var(--end)}
+.rival-card .rv-power{font-size:.72rem;color:var(--text-muted)}
+.rival-card .rv-level{font-size:.7rem;color:var(--accent);font-family:var(--font-heading)}
+.arena-hp-bars{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:1rem 0}
+.hp-bar-group{display:flex;flex-direction:column;gap:4px}
+.hp-bar-group .hb-name{font-size:.8rem;font-weight:600;display:flex;justify-content:space-between}
+.hp-bar-group .hb-name span{color:var(--text-muted);font-weight:400}
+.hp-bar-outer{height:14px;background:var(--bg);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.hp-bar-inner{height:100%;border-radius:6px;transition:width .4s ease;background:linear-gradient(90deg,#c0392b,#27ae60)}
+.hp-bar-inner.enemy{background:linear-gradient(90deg,#8e44ad,#c0392b)}
+@media(max-width:768px){.arena-vs{grid-template-columns:1fr;gap:1rem}.arena-fighter img{width:100px;height:130px}}
+
+/* TESORERIA */
+.treasury-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:1.5rem}
+.tr-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-md);padding:1rem;text-align:center}
+.tr-card .tr-label{font-size:.7rem;color:var(--text-muted);font-family:var(--font-heading);letter-spacing:1px;text-transform:uppercase;margin-bottom:.4rem}
+.tr-card .tr-val{font-family:var(--font-heading);font-size:1.5rem;font-weight:700}
+.tr-card.income .tr-val{color:var(--end)}
+.tr-card.expense .tr-val{color:var(--str)}
+.tr-card.balance .tr-val{color:var(--accent)}
+.tr-card.shame .tr-val{color:#8e44ad}
+.tr-form{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.tr-form input,.tr-form select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.6rem .8rem;border-radius:var(--radius-sm);font-family:var(--font-main);font-size:.85rem;transition:var(--transition)}
+.tr-form input:focus,.tr-form select:focus{border-color:var(--accent);outline:none}
+.tr-form input[type=number]{width:120px}
+.tr-form input[type=text]{flex:1;min-width:140px}
+.tr-form select{min-width:130px}
+.tr-form button{white-space:nowrap}
+.tr-list{max-height:350px;overflow-y:auto}
+.tr-item{display:flex;align-items:center;gap:.8rem;padding:.7rem .8rem;border-bottom:1px solid rgba(42,35,24,.3);font-size:.85rem;transition:var(--transition)}
+.tr-item:hover{background:rgba(212,160,23,.03)}
+.tr-item .tri-icon{font-size:1.1rem;width:28px;text-align:center}
+.tr-item .tri-info{flex:1}
+.tr-item .tri-name{font-weight:600;font-size:.85rem}
+.tr-item .tri-cat{font-size:.7rem;color:var(--text-muted)}
+.tr-item .tri-amount{font-family:var(--font-heading);font-weight:700;font-size:.9rem}
+.tr-item .tri-amount.pos{color:var(--end)}
+.tr-item .tri-amount.neg{color:var(--str)}
+.tr-item .tri-del{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:.8rem;padding:4px;transition:var(--transition)}
+.tr-item .tri-del:hover{color:var(--str)}
+.shame-alert{background:rgba(142,68,173,.08);border:1px solid rgba(142,68,173,.3);border-radius:var(--radius-md);padding:1rem;margin-top:1rem;font-style:italic;color:#a569bd;font-size:.85rem;line-height:1.6}
+.shame-alert strong{color:#8e44ad;font-family:var(--font-heading)}
+
+/* MEDIEVAL ORNAMENTS */
+.card::before{content:'';position:absolute;top:-1px;left:20px;right:20px;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.15;pointer-events:none}
+.card{position:relative;overflow:hidden}
+.sidebar-user{background:rgba(212,160,23,.03)}
+#sidebar-rank{color:var(--accent);font-family:var(--font-heading)}
+.nav-item{font-family:var(--font-main);letter-spacing:.3px}
+</style>
+</head>
+<body>
+
+<div id="intro-screen">
+    <div class="intro-content">
+        <div class="intro-icon">&#9876;&#65039;</div>
+        <div class="intro-title">LEVEL UP</div>
+        <div class="intro-lore">
+            <span>En las tierras de Askelat, un reino forjado por los antiguos, la disciplina era la ley suprema y cada guerrero era esculpido por el fuego de sus propios habitos...</span>
+            <span>Pero la Gran Pereza devoro el reino. Los caballeros abandonaron sus espadas, olvidaron el valor del esfuerzo, y el oro de Askelat se perdio en la niebla del conformismo.</span>
+            <span>Ahora, desde las ruinas, una nueva Orden se levanta. Guerreros que forjan su cuerpo con hierro, su mente con sabiduria, y su fortuna con paciencia de acero.</span>
+            <span>Tu has sido elegido. Toma tu espada. El destino de Askelat esta en tus manos.</span>
+        </div>
+        <div class="intro-skip"><button onclick="document.getElementById('intro-screen').classList.add('fade-out');setTimeout(function(){document.getElementById('intro-screen').style.display='none'},1000)">Entrar al Reino</button></div>
+    </div>
+</div>
+
+<div id="auth-overlay" class="auth-view">
+    <div class="auth-box">
+        <div class="logo-icon">&#9876;&#65039;</div>
+        <h1 class="auth-title">Level Up</h1>
+        <p class="auth-subtitle">Forja tu leyenda, guerrero</p>
+        <form id="auth-form" class="auth-form">
+            <input type="text" id="auth-nickname" placeholder="Nombre de Guerrero" required autofocus>
+            <button type="submit" class="btn-primary">Entrar al Reino</button>
+        </form>
+    </div>
+</div>
+
+<div id="app-shell" class="app-shell hidden">
+  <aside class="sidebar">
+    <div class="sidebar-logo"><span class="logo-icon" style="font-size:1.3rem;color:var(--accent)">&#9876;&#65039;</span><span class="logo-text">LEVEL UP</span></div>
+    <nav class="nav-group">
+      <a href="#" class="nav-item active" id="nav-dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span>Panel</span></a>
+      <a href="#" class="nav-item" id="nav-personaje"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Personaje</span></a>
+      <a href="#" class="nav-item" id="nav-habitos"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span>Misiones</span></a>
+      <a href="#" class="nav-item" id="nav-metas"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg><span>Objetivos</span></a>
+      <a href="#" class="nav-item" id="nav-tesoreria"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Tesoreria</span></a>
+      <a href="#" class="nav-item" id="nav-arena"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg><span>Arena</span></a>
+      <a href="#" class="nav-item" id="nav-online"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg><span>Ranking</span></a>
+    </nav>
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:1rem">
+      <div class="sidebar-user"><img id="sidebar-avatar" src="caballero 1.png" alt=""><div><div id="sidebar-name">...</div><div id="sidebar-rank">GUERRERO</div></div></div>
+      <div style="display:flex;gap:8px"><button id="reset-btn" class="btn-ghost" style="flex:1;padding:.5rem;font-size:.7rem">Reset</button><button id="logout-btn" class="btn-ghost" style="flex:1;padding:.5rem;font-size:.7rem">Salir</button></div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar-pro">
+      <div><h1 id="greeting">...</h1><p id="current-date"></p></div>
+      <div class="xp-badge">
+        <div class="xp-avatar-container">
+          <svg class="xp-progress-ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="16" fill="none" class="ring-bg" stroke-width="3"></circle><circle id="xp-ring-fill" cx="18" cy="18" r="16" fill="none" class="ring-fill" stroke-width="3" stroke-dasharray="0, 100" stroke-linecap="round"></circle></svg>
+          <img id="topbar-avatar" src="caballero 1.png" alt="">
+        </div>
+        <div><div id="topbar-name">...</div><div class="level-tag"><span id="topbar-level-val">Nivel 1</span> &middot; <span id="topbar-xp-total">0</span> XP</div></div>
+      </div>
+    </header>
+
+    <div id="views">
+      <!-- DASHBOARD -->
+      <section id="view-dashboard" class="view">
+        <div class="stat-grid">
+          <div class="card stat-card"><div class="stat-label">&#9876;&#65039; Experiencia</div><div class="stat-value"><span id="dash-xp">0</span> XP</div></div>
+          <div class="card stat-card"><div class="stat-label">&#128736;&#65039; Progreso Hoy</div><div class="stat-value"><span id="dash-daily">0%</span></div></div>
+          <div class="card stat-card"><div class="stat-label">&#128293; Racha</div><div class="stat-value"><span id="dash-streak">0</span></div></div>
+          <div class="card stat-card"><div class="stat-label">&#129689; Oro del Reino</div><div class="stat-value"><span id="dash-coins">0</span></div></div>
+        </div>
+        <div class="main-layout">
+          <div class="card"><div class="card-header"><h3>Misiones del Dia</h3><button id="add-habit-dash" class="btn-pro-add">+</button></div><div id="habits-dash-list"></div></div>
+          <div class="right-stack">
+            <div class="card chart-card"><div class="card-header"><h3>Cronica Semanal</h3></div><div id="chart-bars"></div><div class="chart-labels"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div></div>
+            <div class="card"><div class="card-header"><h3>Mazmorras</h3><button id="add-goal-dash" class="btn-pro-add">+</button></div><div id="goals-dash-list"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PERSONAJE -->
+      <section id="view-personaje" class="view hidden">
+        <div class="char-top">
+          <div class="card">
+            <div class="card-header"><h3>Tu Guerrero</h3><div class="coin-pill">&#128176; <span id="char-coins">0</span></div></div>
+            <div class="char-display">
+              <div class="char-avatar-frame"><img id="char-avatar" src="caballero 1.png" alt=""></div>
+              <div class="char-meta"><div class="char-skin-name" id="char-skin-name">Caballero</div></div>
+              <div class="power-wrap"><div class="power-val" id="char-power">4</div><div class="power-label">Poder Total</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><h3>Atributos</h3></div>
+            <div class="stats-list">
+              <div class="stat-row"><span class="s-name">FUE</span><div class="stat-bar-wrap"><div class="stat-bar-fill str" id="bar-str"></div></div><span class="s-val" id="val-str">1</span><button class="stat-add" onclick="app.allocateStat('str')">+</button></div>
+              <div class="stat-row"><span class="s-name">RES</span><div class="stat-bar-wrap"><div class="stat-bar-fill end" id="bar-end"></div></div><span class="s-val" id="val-end">1</span><button class="stat-add" onclick="app.allocateStat('end')">+</button></div>
+              <div class="stat-row"><span class="s-name">INT</span><div class="stat-bar-wrap"><div class="stat-bar-fill int" id="bar-int"></div></div><span class="s-val" id="val-int">1</span><button class="stat-add" onclick="app.allocateStat('int')">+</button></div>
+              <div class="stat-row"><span class="s-name">AGI</span><div class="stat-bar-wrap"><div class="stat-bar-fill agi" id="bar-agi"></div></div><span class="s-val" id="val-agi">1</span><button class="stat-add" onclick="app.allocateStat('agi')">+</button></div>
+            </div>
+            <div class="sp-info"><span>Puntos disponibles</span><span class="sp-val" id="char-sp">0</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Armeria del Reino</h3></div>
+          <div class="skin-shop-grid" id="skin-shop"></div>
+        </div>
+      </section>
+
+      <!-- TESORERIA -->
+      <section id="view-tesoreria" class="view hidden">
+        <div class="treasury-summary" id="tr-summary"></div>
+        <div class="card">
+          <div class="card-header"><h3>Registro del Tesorero</h3></div>
+          <div class="tr-form" id="tr-form">
+            <select id="tr-type"><option value="income">Ingreso</option><option value="expense">Gasto</option></select>
+            <input type="number" id="tr-amount" placeholder="Cantidad" min="0" step="0.01">
+            <input type="text" id="tr-desc" placeholder="Descripcion">
+            <select id="tr-cat">
+              <option value="salario">Salario / Ingresos</option>
+              <option value="comida">Comida</option>
+              <option value="transporte">Transporte</option>
+              <option value="servicios">Servicios / Facturas</option>
+              <option value="entretenimiento">Entretenimiento</option>
+              <option value="ropa">Ropa</option>
+              <option value="ahorro">Ahorro / Inversion</option>
+              <option value="hormiga">Gasto Hormiga</option>
+              <option value="otro">Otro</option>
+            </select>
+            <button class="btn-primary" style="padding:.6rem 1.2rem;width:auto" onclick="app.addTransaction()">Registrar</button>
+          </div>
+          <div class="tr-list" id="tr-list"></div>
+          <div id="tr-shame"></div>
+        </div>
+        <div class="card" style="margin-top:1.5rem">
+          <div class="card-header"><h3>Consejo del Sabio Tesorero</h3></div>
+          <div id="tr-advice" style="font-style:italic;color:var(--text-muted);line-height:1.7"></div>
+        </div>
+      </section>
+
+      <!-- ARENA PVP -->
+      <section id="view-arena" class="view hidden">
+        <div class="card" id="arena-select-card">
+          <div class="card-header"><h3>Arena de Askelat</h3></div>
+          <p style="color:var(--text-muted);font-style:italic;margin-bottom:1.2rem;font-size:.9rem">Elige a tu oponente. Estudia sus fuerzas antes de desafiar.</p>
+          <div id="arena-rivals" class="arena-rivals-list"></div>
+        </div>
+        <div class="card" id="arena-battle-card" style="display:none;margin-top:1.5rem">
+          <div class="card-header"><h3>Campo de Batalla</h3></div>
+          <div class="arena-vs" id="arena-vs"></div>
+          <div class="arena-hp-bars" id="arena-hp" style="display:none"></div>
+          <div class="arena-log" id="arena-log" style="display:none"></div>
+        </div>
+        <div class="card" style="margin-top:1.5rem">
+          <div class="card-header"><h3>Cronicas de Guerra</h3></div>
+          <div id="arena-history"><p class="empty-state">Las cronicas de batalla estan vacias. Entra a la Arena y forja tu leyenda.</p></div>
+        </div>
+      </section>
+
+      <section id="view-habitos" class="view hidden"><div class="card-header"><h2 style="font-family:var(--font-heading);color:var(--accent)">Tablero de Misiones</h2></div><div class="card"><div id="habits-full-list"></div></div></section>
+      <section id="view-metas" class="view hidden"><div class="card-header"><h2 style="font-family:var(--font-heading);color:var(--accent)">Mazmorras Activas</h2></div><div id="goals-full-list" class="stat-grid"></div></section>
+      <section id="view-online" class="view hidden"><div class="card-header"><h2 style="font-family:var(--font-heading);color:var(--accent)">Salon de la Fama</h2></div><div class="card"><div id="leaderboard-list"></div></div></section>
+    </div>
+  </main>
+
+  <nav class="mobile-nav-dock">
+    <a href="#" class="dock-item active" data-view="dashboard"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></a>
+    <a href="#" class="dock-item" data-view="personaje"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+    <a href="#" class="dock-item" data-view="habitos"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></a>
+    <a href="#" class="dock-item" data-view="tesoreria"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></a>
+    <a href="#" class="dock-item" data-view="arena"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></a>
+    <a href="#" class="dock-item" data-view="online"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></a>
+  </nav>
+</div>
+
+<div id="modal-container" class="auth-view hidden">
+    <div class="auth-box glass-modal">
+        <header class="card-header"><h3 id="modal-title">Config</h3><button id="modal-close-btn" class="btn-ghost">&#10005;</button></header>
+        <form id="app-modal-form" class="auth-form pro-form">
+            <div class="form-field"><label id="modal-label-1">Nombre</label><input type="text" id="modal-input-1" required></div>
+            <div class="form-field"><label id="modal-label-2">Detalle / Meta</label><input type="text" id="modal-input-2"></div>
+            <button type="submit" class="btn-primary">Guardar</button>
+        </form>
+    </div>
+</div>
+<div id="toast-notify" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SUPABASE_URL='https://oqmomudrplcxgldbrwvl.supabase.co';
+var SUPABASE_KEY='sb_publishable_oVFMjR0Upwl6IXV3yD9c7Q_DAFcaphz';
+var sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+var SKINS=[
+    {id:'caballero1',name:'Caballero de Hierro',img:'caballero 1.png',price:0,stats:{str:1,end:1},desc:'Recluta de la Orden de Askelat. Con una espada heredada y un escudo de roble, juro ante las ruinas del reino caido que restauraria su gloria. Todo heroe comienza con un primer juramento.'},
+    {id:'aventurero',name:'Explorador de Askelat',img:'skinbase.png',price:800,stats:{agi:2,int:1},desc:'Antes de que Askelat cayera, recorrio sus fronteras con solo una mochila y un mapa antiguo. Descubrio que la verdadera riqueza del reino estaba en el conocimiento, no en el oro.'},
+    {id:'ninja',name:'Sombra de Kurai',img:'ninja.png',price:2000,stats:{agi:4,str:2},desc:'Entrenado en las Catacumbas de Askelat, donde la luz no alcanza. Domina el arte de la disciplina silenciosa. Cada habito que forja es una daga invisible que corta la debilidad.'},
+    {id:'caballero2',name:'Guardian de Cristal',img:'caballero 2.png',price:5000,stats:{str:5,end:4,int:1},desc:'Portador de los Cristales Arcanos de Askelat. Su armadura brilla con el poder de mil batallas internas ganadas. Solo quienes dominan cuerpo, mente y fortuna alcanzan este rango sagrado.'},
+    {id:'caballero3',name:'Paladin del Amanecer',img:'caballero 3.png',price:10000,stats:{str:6,end:6,int:4,agi:2},desc:'La leyenda maxima de Askelat. Se dice que su halo no fue otorgado por los dioses, sino forjado con 10.000 dias de disciplina inquebrantable. Su luz es la prueba de que un mortal puede trascender.'}
+];
+var STAT_NAMES={str:'FUE',end:'RES',int:'INT',agi:'AGI'};
+var DUNGEON_LORE={
+    '\uD83D\uDD25 Mazmorra del Hierro':'30 dias de ejercicio sin fallar. Solo el fuego constante forja acero verdadero.',
+    '\uD83D\uDC89 Boveda del Dragon':'Ahorra 30 dias seguidos. El dragon custodia el tesoro, pero tu lo construyes.',
+    '\uD83D\uDCDA Biblioteca Prohibida':'Leer 500 paginas. Los secretos del universo estan escritos para quien tenga paciencia.',
+    '\u26D3\uFE0F Cadena Inquebrantable':'60 dias sin romper la racha. Cada eslabon es un dia que elegiste ser mejor.',
+    '\uD83D\uDC8E Tesoro del Titan':'90 dias de disciplina total. Solo los titanes construyen imperios.'
+};
+
+class AndradeApp{
+    constructor(){
+        this.uid=localStorage.getItem('andrade_uid');
+        this.initDOM();
+        if(this.uid)this.initSession();else this.showAuth();
+    }
+    initDOM(){
+        this.$=function(id){return document.getElementById(id)};
+        this.els={auth:this.$('auth-overlay'),app:this.$('app-shell'),views:document.querySelectorAll('.view'),nav:document.querySelectorAll('.nav-item,.dock-item'),greeting:this.$('greeting'),progressTotal:this.$('xp-ring-fill'),toast:this.$('toast-notify'),modal:this.$('modal-container'),modalForm:this.$('app-modal-form')};
+    }
+    showAuth(){
+        this.els.auth.classList.remove('hidden');
+        this.$('auth-form').onsubmit=function(e){e.preventDefault();var nick=document.getElementById('auth-nickname').value.trim();if(nick){localStorage.setItem('andrade_uid',nick);app.uid=nick;app.initSession();app.els.auth.classList.add('hidden');app.notify('Conexion Establecida');}};
+    }
+    async initSession(){
+        this.els.app.classList.remove('hidden');this.els.auth.classList.add('hidden');
+        this.loadLocalState();this.setupHandlers();this.updateDate();this.renderAll();
+        try{await this.syncRemoteState();this.renderAll();}catch(e){}
+        try{this.syncRealtime();}catch(e){}
+    }
+    loadLocalState(){
+        var key='and_data_'+this.uid;
+        var raw=JSON.parse(localStorage.getItem(key))||{};
+        var def={xp:0,level:1,streak:0,coins:0,skin:'caballero1',ownedSkins:['caballero1'],stats:{str:1,end:1,int:1,agi:1},skillPoints:0,
+            habits:[
+                {name:'\u2694\uFE0F Forja del Guerrero',det:'30+ min de ejercicio. Tu armadura se forja con sudor, no con deseos.',done:false},
+                {name:'\uD83D\uDCA7 Elixir de Vida',det:'Beber 2L de agua. El rio que no fluye se pudre.',done:false},
+                {name:'\uD83E\uDD57 Banquete del Sabio',det:'Comer limpio y balanceado. Un guerrero no envenena su propia espada.',done:false},
+                {name:'\uD83C\uDF19 Descanso del Heroe',det:'Dormir 7-8h. Hasta los dioses descansan antes de la batalla.',done:false},
+                {name:'\uD83E\uDDD8 Oraculo Interior',det:'10 min de meditacion. Quien domina su mente, domina el campo de batalla.',done:false},
+                {name:'\uD83D\uDCDC Pergaminos Ancestrales',det:'Leer 10 paginas o estudiar algo nuevo. El conocimiento es el arma que nadie te puede quitar.',done:false},
+                {name:'\uD83D\uDDFA\uFE0F Mapa de Batalla',det:'Planificar las 3 misiones clave de manana. Sin estrategia, la espada es solo hierro.',done:false},
+                {name:'\uD83D\uDCB0 Cofre del Reino',det:'Ahorrar una cantidad fija hoy. Cada moneda guardada es un ladrillo de tu fortaleza.',done:false},
+                {name:'\uD83D\uDCD6 Registro del Tesorero',det:'Anotar TODOS los gastos. Lo que no se mide, se pierde en la niebla.',done:false},
+                {name:'\uD83D\uDCC8 Mercado de Cristales',det:'Revisar inversiones o aprender sobre finanzas. El oro dormido es oro muerto.',done:false},
+                {name:'\uD83D\uDEE1\uFE0F Escudo Anti-Tentacion',det:'Cero compras impulsivas. El enemigo mas peligroso es el placer inmediato.',done:false},
+                {name:'\u2728 Santuario del Orden',det:'10 min ordenando tu espacio. Un reino en caos no puede prosperar.',done:false}
+            ],
+            goals:[
+                {name:'\uD83D\uDD25 Mazmorra del Hierro',cur:0,target:30},
+                {name:'\uD83D\uDC89 Boveda del Dragon',cur:0,target:30},
+                {name:'\uD83D\uDCDA Biblioteca Prohibida',cur:0,target:500},
+                {name:'\u26D3\uFE0F Cadena Inquebrantable',cur:0,target:60},
+                {name:'\uD83D\uDC8E Tesoro del Titan',cur:0,target:90}
+            ],metrics:[20,45,60,35,80,55,40],lastDate:new Date().toDateString()};
+        this.state=Object.assign({},def,raw);
+        if(!this.state.stats||typeof this.state.stats.str==='undefined')this.state.stats={str:1,end:1,int:1,agi:1};
+        if(!Number.isFinite(this.state.skillPoints))this.state.skillPoints=0;
+        if(!this.state.skin)this.state.skin='caballero1';
+        if(!Array.isArray(this.state.ownedSkins))this.state.ownedSkins=['caballero1'];
+        if(this.state.ownedSkins.indexOf('caballero1')<0)this.state.ownedSkins.push('caballero1');
+        if(!Number.isFinite(this.state.coins))this.state.coins=0;
+        if(!Array.isArray(this.state.transactions))this.state.transactions=[];
+        if(this.uid.toLowerCase()==='alex')this.state.coins=999999;
+        if(!raw.habits||!raw._loreV2){this.state.habits=def.habits;this.state.goals=def.goals;this.state._loreV2=true;}
+        if(this.state.lastDate!==new Date().toDateString()){this.state.habits.forEach(function(h){h.done=false});this.state.lastDate=new Date().toDateString();this.save(true);}
+    }
+    async syncRemoteState(){
+        if(!this.uid)return;
+        var r=await sb.from('warriors').select('*').eq('uid',this.uid).single();
+        if(r.data){this.state=Object.assign(this.state,r.data.state_json);localStorage.setItem('and_data_'+this.uid,JSON.stringify(this.state));}
+        else if(r.error&&r.error.code==='PGRST116')await this.saveRemote();
+    }
+    setupHandlers(){
+        var self=this;
+        this.els.nav.forEach(function(el){el.onclick=function(e){e.preventDefault();var v=el.id?el.id.replace('nav-',''):el.getAttribute('data-view');self.switchView(v);}});
+        this.$('logout-btn').onclick=function(){localStorage.removeItem('andrade_uid');location.reload()};
+        this.$('reset-btn').onclick=function(){if(confirm('Reiniciar todo?')){localStorage.clear();location.reload();}};
+        this.$('add-habit-dash').onclick=function(){self.openModal('habit')};
+        this.$('add-goal-dash').onclick=function(){self.openModal('goal')};
+        this.$('modal-close-btn').onclick=function(){self.els.modal.classList.add('hidden')};
+        this.els.modalForm.onsubmit=function(e){self.saveModal(e)};
+    }
+
+    getSkin(id){return SKINS.find(function(s){return s.id===id})||SKINS[0];}
+    getComputedStats(){
+        var base={str:this.state.stats.str,end:this.state.stats.end,int:this.state.stats.int,agi:this.state.stats.agi};
+        var skin=this.getSkin(this.state.skin);
+        if(skin.stats){Object.keys(skin.stats).forEach(function(k){base[k]=(base[k]||0)+skin.stats[k]});}
+        return base;
+    }
+    getTotalPower(){var s=this.getComputedStats();return s.str+s.end+s.int+s.agi;}
+
+    renderAll(){
+        var s=this.state;var skin=this.getSkin(s.skin);
+        this.els.greeting.innerText='Salve, '+this.uid+'!';
+        this.$('topbar-name').innerText=this.uid;
+        this.$('sidebar-name').innerText=this.uid;
+        this.$('sidebar-rank').innerText=skin.name.toUpperCase();
+        this.$('topbar-level-val').innerText='Nivel '+s.level;
+        this.$('topbar-xp-total').innerText=s.xp.toLocaleString();
+        this.$('dash-xp').innerText=s.xp.toLocaleString();
+        this.$('dash-streak').innerText=s.streak;
+        this.$('dash-coins').innerText=s.coins.toLocaleString();
+        var done=s.habits.filter(function(h){return h.done}).length,total=s.habits.length;
+        this.$('dash-daily').innerText=(total>0?Math.round(done/total*100):0)+'%';
+        this.renderHabits();this.renderGoals();this.renderLeaderboard();this.renderChart();
+        this.renderCharacter();this.renderStats();this.renderSkinShop();this.renderBattleHistory();
+        this.renderTreasury();this.loadArenaRivals();
+        var ringPct=(s.xp%1000)/10;
+        this.els.progressTotal.setAttribute('stroke-dasharray',ringPct+', 100');
+        this.$('sidebar-avatar').src=skin.img;
+        this.$('topbar-avatar').src=skin.img;
+    }
+    renderHabits(){
+        var self=this;
+        var targets=['habits-dash-list','habits-full-list'];
+        targets.forEach(function(tid){
+            var c=self.$(tid);if(!c)return;
+            c.innerHTML=self.state.habits.length?'':'<p class="empty-state">No hay misiones.</p>';
+            self.state.habits.forEach(function(h,i){
+                var el=document.createElement('div');el.className='habit-item '+(h.done?'done':'');
+                el.innerHTML='<div class="habit-check"></div><div style="flex:1"><div class="habit-name">'+h.name+'</div><div class="habit-det">'+(h.det||'Mision')+'</div></div>';
+                el.onclick=function(){self.toggleHabit(i)};c.appendChild(el);
+            });
+        });
+    }
+    renderGoals(){
+        var self=this;
+        ['goals-dash-list','goals-full-list'].forEach(function(tid){
+        var c=self.$(tid);if(!c)return;
+        c.innerHTML=self.state.goals.length?'':'<p class="empty-state">Sin mazmorras activas.</p>';
+        self.state.goals.forEach(function(g,i){
+            var el=document.createElement('div');el.className='goal-pro-card';
+            var p=Math.min(g.cur/g.target*100,100);
+            var lore=DUNGEON_LORE[g.name]||'';
+            var completed=g.cur>=g.target;
+            el.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-weight:700;font-size:.95rem">'+g.name+'</span><strong style="color:var(--accent)">'+g.cur+'/'+g.target+'</strong></div>'
+                +(lore?'<div style="font-size:.72rem;color:var(--text-muted);font-style:italic;margin-bottom:10px">'+lore+'</div>':'')
+                +'<div class="progress-bg"><div class="progress-bar" style="width:'+p+'%;background:'+(completed?'var(--accent)':'var(--text)')+'"></div></div>'
+                +'<div style="display:flex;gap:10px;margin-top:12px">'
+                +(completed?'<button class="btn-primary" style="padding:.4rem;flex:1;background:var(--accent);color:var(--bg)" disabled>CONQUISTADA</button>':'<button class="btn-primary" style="padding:.4rem;flex:1" onclick="event.stopPropagation();app.modGoal('+i+',1)">+1</button>')
+                +'<button class="btn-ghost" style="padding:.4rem 1rem" onclick="event.stopPropagation();app.delGoal('+i+')">X</button></div>';
+            c.appendChild(el);
+        });
+        });
+    }
+    renderCharacter(){
+        var skin=this.getSkin(this.state.skin);
+        var img=this.$('char-avatar');if(img)img.src=skin.img;
+        var n=this.$('char-skin-name');if(n)n.innerText=skin.name;
+        var cc=this.$('char-coins');if(cc)cc.innerText=this.state.coins.toLocaleString();
+        var pw=this.$('char-power');if(pw)pw.innerText=this.getTotalPower();
+    }
+    renderStats(){
+        var computed=this.getComputedStats();var base=this.state.stats;
+        var self=this;
+        ['str','end','int','agi'].forEach(function(k){
+            var bar=self.$('bar-'+k);var val=self.$('val-'+k);
+            if(bar)bar.style.width=Math.min(computed[k]/30*100,100)+'%';
+            if(val){var bonus=computed[k]-base[k];val.innerText=computed[k]+(bonus>0?' (+'+bonus+')':'');}
+        });
+        var sp=this.$('char-sp');if(sp)sp.innerText=this.state.skillPoints;
+        document.querySelectorAll('.stat-add').forEach(function(btn){btn.disabled=self.state.skillPoints<=0});
+    }
+    renderSkinShop(){
+        var c=this.$('skin-shop');if(!c)return;c.innerHTML='';
+        var self=this;
+        SKINS.forEach(function(skin){
+            var owned=self.state.ownedSkins.indexOf(skin.id)>=0;
+            var equipped=self.state.skin===skin.id;
+            var canBuy=self.state.coins>=skin.price;
+            var statsText=Object.keys(skin.stats).map(function(k){return'+'+skin.stats[k]+' '+STAT_NAMES[k]}).join(', ')||'Sin bonus';
+            var card=document.createElement('div');
+            card.className='skin-card'+(equipped?' equipped':'');
+            var btnHtml='';
+            if(equipped)btnHtml='<button class="sk-btn active" disabled>Equipado</button>';
+            else if(owned)btnHtml='<button class="sk-btn" onclick="app.equipSkin(\''+skin.id+'\')">Equipar</button>';
+            else if(skin.price===0)btnHtml='<button class="sk-btn" onclick="app.equipSkin(\''+skin.id+'\')">Equipar</button>';
+            else btnHtml='<button class="sk-btn buy" '+(canBuy?'':'disabled')+' onclick="app.buySkin(\''+skin.id+'\')">'+skin.price.toLocaleString()+' monedas</button>';
+            card.innerHTML='<div class="skin-img-wrap"><img src="'+skin.img+'" alt="'+skin.name+'"></div><div class="skin-info"><div class="sk-name">'+skin.name+'</div><div class="sk-stats">'+statsText+'</div><div class="sk-stats" style="color:var(--text-muted);font-style:italic">'+skin.desc+'</div>'+btnHtml+'</div>';
+            c.appendChild(card);
+        });
+    }
+
+    async toggleHabit(i){var h=this.state.habits[i];h.done=!h.done;if(h.done){this.awardXP(100);this.notify('+100 XP');}else this.awardXP(-100);await this.save();}
+    async modGoal(i,val){var g=this.state.goals[i];g.cur=Math.min(g.cur+val,g.target);if(g.cur===g.target){this.awardXP(500);this.notify('OBJETIVO LOGRADO!');}else this.awardXP(25);await this.save();}
+    async delGoal(i){if(confirm('Eliminar?')){this.state.goals.splice(i,1);await this.save();}}
+    awardXP(val){
+        this.state.xp=Math.max(0,this.state.xp+val);
+        var prev=this.state.level;var nxt=Math.floor(this.state.xp/1000)+1;
+        if(nxt>prev){var lvls=nxt-prev;var coinR=lvls*250;var spR=lvls*3;this.state.level=nxt;this.state.coins+=coinR;this.state.skillPoints+=spR;this.notify('NIVEL '+nxt+' | +'+coinR+' monedas | +'+spR+' pts');}
+        else this.state.level=nxt;
+        if(val>0)this.showXPPop(val);
+    }
+    async allocateStat(key){if(this.state.skillPoints<=0)return;this.state.stats[key]++;this.state.skillPoints--;this.notify(STAT_NAMES[key]+' +1');await this.save();}
+    async buySkin(id){
+        var skin=this.getSkin(id);if(!skin||this.state.ownedSkins.indexOf(id)>=0)return;
+        if(this.state.coins<skin.price){this.notify('Sin monedas suficientes');return;}
+        this.state.coins-=skin.price;this.state.ownedSkins.push(id);this.state.skin=id;
+        this.notify('Compraste '+skin.name);await this.save();
+    }
+    async equipSkin(id){
+        if(this.state.ownedSkins.indexOf(id)<0&&this.getSkin(id).price>0)return;
+        this.state.skin=id;this.notify('Skin: '+this.getSkin(id).name);await this.save();
+    }
+    addTransaction(){
+        var type=this.$('tr-type').value;
+        var amount=parseFloat(this.$('tr-amount').value);
+        var desc=this.$('tr-desc').value.trim();
+        var cat=this.$('tr-cat').value;
+        if(!amount||amount<=0||!desc){this.notify('Completa todos los campos');return;}
+        if(!this.state.transactions)this.state.transactions=[];
+        var t={type:type,amount:amount,desc:desc,cat:cat,date:new Date().toLocaleDateString(),ts:Date.now()};
+        this.state.transactions.unshift(t);
+        this.$('tr-amount').value='';this.$('tr-desc').value='';
+        if(type==='expense'&&cat==='hormiga'){
+            this.notify('DESHONRA! Gasto hormiga registrado');
+            this.awardXP(-50);
+        }else if(type==='expense'){
+            this.awardXP(10);
+            this.notify('Gasto registrado (+10 XP por disciplina)');
+        }else{
+            this.awardXP(20);
+            this.notify('Ingreso registrado (+20 XP)');
+        }
+        this.save();
+    }
+    delTransaction(idx){
+        if(!this.state.transactions)return;
+        this.state.transactions.splice(idx,1);
+        this.save();
+    }
+    renderTreasury(){
+        var c=this.$('tr-summary');var list=this.$('tr-list');var shame=this.$('tr-shame');var advice=this.$('tr-advice');
+        if(!c)return;
+        var txs=this.state.transactions||[];
+        var income=0,expense=0,hormiga=0;
+        txs.forEach(function(t){
+            if(t.type==='income')income+=t.amount;
+            else{expense+=t.amount;if(t.cat==='hormiga')hormiga+=t.amount;}
+        });
+        var balance=income-expense;
+        var catIcons={salario:'\u{1F4B0}',comida:'\u{1F356}',transporte:'\u{1F3C7}',servicios:'\u{1F3F0}',entretenimiento:'\u{1F3AD}',ropa:'\u{1F9E5}',ahorro:'\u{1F48E}',hormiga:'\u{1F41C}',otro:'\u{1F4E6}'};
+        c.innerHTML='<div class="tr-card income"><div class="tr-label">Ingresos</div><div class="tr-val">$'+income.toLocaleString(undefined,{minimumFractionDigits:2})+'</div></div>'
+            +'<div class="tr-card expense"><div class="tr-label">Gastos</div><div class="tr-val">$'+expense.toLocaleString(undefined,{minimumFractionDigits:2})+'</div></div>'
+            +'<div class="tr-card balance"><div class="tr-label">Oro Disponible</div><div class="tr-val">$'+balance.toLocaleString(undefined,{minimumFractionDigits:2})+'</div></div>'
+            +'<div class="tr-card shame"><div class="tr-label">\u{1F41C} Gastos Hormiga</div><div class="tr-val">$'+hormiga.toLocaleString(undefined,{minimumFractionDigits:2})+'</div></div>';
+        if(list){
+            list.innerHTML='';
+            if(txs.length===0)list.innerHTML='<p class="empty-state">El libro del tesorero esta vacio. Registra tus movimientos de oro.</p>';
+            var self=this;
+            txs.slice(0,50).forEach(function(t,i){
+                var icon=catIcons[t.cat]||'\u{1F4E6}';
+                var el=document.createElement('div');el.className='tr-item';
+                el.innerHTML='<span class="tri-icon">'+icon+'</span>'
+                    +'<div class="tri-info"><div class="tri-name">'+t.desc+'</div><div class="tri-cat">'+t.cat+' \u00b7 '+t.date+'</div></div>'
+                    +'<span class="tri-amount '+(t.type==='income'?'pos':'neg')+'">'+(t.type==='income'?'+':'-')+'$'+t.amount.toLocaleString(undefined,{minimumFractionDigits:2})+'</span>'
+                    +'<button class="tri-del" onclick="app.delTransaction('+i+')">\u2715</button>';
+                list.appendChild(el);
+            });
+        }
+        if(shame){
+            if(hormiga>0){
+                var pct=expense>0?Math.round(hormiga/expense*100):0;
+                var msgs=[
+                    'Los gastos hormiga son la plaga silenciosa de Askelat. Pequenos, invisibles, pero devoran el tesoro del reino sin piedad.',
+                    'Cada moneda perdida en gastos hormiga es un ladrillo menos en tu fortaleza. El enemigo no necesita espadas cuando tienes debilidad.',
+                    'Un verdadero guerrero de Askelat no cae ante tentaciones menores. Cada gasto innecesario es una herida autoinfligida.'
+                ];
+                shame.innerHTML='<div class="shame-alert"><strong>\u{1F41C} Alerta de Deshonra</strong><br>Has gastado <strong>$'+hormiga.toLocaleString(undefined,{minimumFractionDigits:2})+'</strong> en gastos hormiga ('+pct+'% de tus gastos totales).<br><br>'+msgs[Math.floor(hormiga)%msgs.length]+'</div>';
+            }else shame.innerHTML='';
+        }
+        if(advice){
+            var tips=[];
+            if(income===0)tips.push('\u{1F4DC} El tesorero susurra: "Registra tus ingresos primero. Sin conocer tu oro, no puedes planificar la batalla."');
+            if(expense>income*0.9&&income>0)tips.push('\u26A0\uFE0F El sabio advierte: "Estas gastando mas del 90% de tus ingresos. Un reino sin reservas cae ante la primera tormenta."');
+            if(hormiga>income*0.1&&income>0)tips.push('\u{1F41C} El tesorero grita: "Los gastos hormiga superan el 10% de tus ingresos! Cada hormiga parece inofensiva, pero juntas devoran castillos."');
+            if(balance>0&&income>0){var savePct=Math.round(balance/income*100);tips.push('\u{1F48E} El sabio sonrie: "Estas ahorrando el '+savePct+'% de tus ingresos. '+(savePct>=20?'Digno de un Guardian de Cristal!':savePct>=10?'Buen camino, pero un verdadero caballero ahorra al menos 20%.':'Debes ser mas disciplinado. Apunta al 20%.')+'"');}
+            if(tips.length===0)tips.push('\u{1F4DC} El Sabio Tesorero de Askelat te observa. Registra tus ingresos y gastos para recibir su consejo.');
+            advice.innerHTML=tips.join('<br><br>');
+        }
+    }
+    async loadArenaRivals(){
+        var c=this.$('arena-rivals');if(!c)return;
+        var self=this;this.arenaRivals=[];
+        var bots=[
+            {uid:'Guardia de Askelat',state_json:{skin:'caballero1',stats:{str:3,end:3,int:2,agi:2},level:2,xp:1500}},
+            {uid:'Ronin del Viento',state_json:{skin:'ninja',stats:{str:5,end:3,int:2,agi:6},level:4,xp:3500}},
+            {uid:'Caballero Caido',state_json:{skin:'caballero2',stats:{str:8,end:7,int:4,agi:3},level:7,xp:6500}},
+            {uid:'Sombra Eterna',state_json:{skin:'ninja',stats:{str:10,end:6,int:5,agi:10},level:9,xp:8500}},
+            {uid:'Titan de Askelat',state_json:{skin:'caballero3',stats:{str:14,end:13,int:8,agi:6},level:14,xp:13000}}
+        ];
+        try{
+            var r=await sb.from('warriors').select('*');
+            if(r.data){
+                var real=r.data.filter(function(w){return w.uid!==self.uid});
+                self.arenaRivals=real.concat(bots);
+            }else{self.arenaRivals=bots;}
+        }catch(e){self.arenaRivals=bots;}
+        this.renderArenaRivals();
+    }
+    renderArenaRivals(){
+        var c=this.$('arena-rivals');if(!c)return;
+        var self=this;c.innerHTML='';
+        if(this.arenaRivals.length===0){c.innerHTML='<p class="empty-state">No hay guerreros en la arena.</p>';return;}
+        this.arenaRivals.forEach(function(rival,idx){
+            var sj=rival.state_json||{};
+            var ws=self.getWarriorStats(sj);
+            var skin=self.getSkin(sj.skin||'caballero1');
+            var hp=50+(ws.end||1)*6+(ws.str||1)*2;
+            var power=ws.str+ws.end+ws.int+ws.agi;
+            var lvl=sj.level||1;
+            var card=document.createElement('div');
+            card.className='rival-card';
+            card.onclick=function(){self.startBattle(idx)};
+            card.innerHTML='<img src="'+skin.img+'">'
+                +'<div class="rv-info"><div class="rv-name">'+rival.uid+'</div>'
+                +'<div class="rv-skin">'+skin.name+'</div>'
+                +'<div class="rv-stats-row">'
+                +'<span class="rv-stat" style="color:var(--str)">FUE '+ws.str+'</span>'
+                +'<span class="rv-stat" style="color:var(--end)">RES '+ws.end+'</span>'
+                +'<span class="rv-stat" style="color:var(--int)">INT '+ws.int+'</span>'
+                +'<span class="rv-stat" style="color:var(--agi)">AGI '+ws.agi+'</span>'
+                +'</div></div>'
+                +'<div class="rv-right"><div class="rv-level">Nv.'+lvl+'</div><div class="rv-hp">\u2764\uFE0F '+hp+' HP</div><div class="rv-power">Poder: '+power+'</div></div>';
+            c.appendChild(card);
+        });
+    }
+    async startBattle(rivalIdx){
+        if(!this.arenaRivals||rivalIdx===undefined)return;
+        var rival=this.arenaRivals[rivalIdx];if(!rival)return;
+        var vs=this.$('arena-vs');var log=this.$('arena-log');var hpEl=this.$('arena-hp');
+        var battleCard=this.$('arena-battle-card');
+        if(!vs||!log||!battleCard)return;
+        battleCard.style.display='block';
+        battleCard.scrollIntoView({behavior:'smooth'});
+        var self=this;
+        var hitVerbs=['descarga su espada sobre','arremete con furia contra','lanza un golpe devastador a','clava su acero en','desata su ira contra','hunde su hoja en'];
+        var critVerbs=['libera un ataque LEGENDARIO contra','invoca la furia de Askelat sobre','ejecuta un golpe DIVINO contra','canaliza todo su poder en','desata la tormenta de Askelat sobre'];
+        var dodgeVerbs=['se mueve como una sombra y esquiva','lee el ataque y lo evade con gracia','desaparece del alcance de','bloquea con su escudo el golpe de','gira y evita el filo de'];
+        var winVerbs=['La arena ruge. ','Los cielos de Askelat se iluminan. ','El suelo tiembla ante el vencedor. ','Las cronicas de Askelat recordaran este dia. ','El pueblo de Askelat grita de jubilo. '];
+        var loseVerbs=['La oscuridad cubre la arena. ','Un silencio frio invade Askelat. ','Las sombras se ciernen sobre el caido. ','El eco de la derrota resuena en las murallas. '];
+        function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+        var sj=rival.state_json||{};
+        var enemyName=rival.uid;
+        var enemySkin=self.getSkin(sj.skin||'caballero1');
+        var enemyStats=self.getWarriorStats(sj);
+        var enemyLevel=sj.level||1;
+        var enemyPower=enemyStats.str+enemyStats.end+enemyStats.int+enemyStats.agi;
+        var mySkin=this.getSkin(this.state.skin);
+        var myStats=this.getComputedStats();
+        var myPower=this.getTotalPower();
+        var myMaxHp=50+myStats.end*6+myStats.str*2;
+        var eMaxHp=50+enemyStats.end*6+enemyStats.str*2;
+        var myHp=myMaxHp;var eHp=eMaxHp;
+        vs.innerHTML='<div class="arena-fighter"><img src="'+mySkin.img+'"><div class="af-name">'+this.uid+'</div><div class="af-skin">'+mySkin.name+'</div><div class="af-power">Poder: '+myPower+'</div></div>'
+            +'<div class="arena-vs-icon">\u2694\uFE0F</div>'
+            +'<div class="arena-fighter"><img src="'+enemySkin.img+'"><div class="af-name">'+enemyName+'</div><div class="af-skin">'+enemySkin.name+' \u00b7 Nv.'+enemyLevel+'</div><div class="af-power">Poder: '+enemyPower+'</div></div>';
+        hpEl.style.display='grid';
+        function updateHpBars(){
+            hpEl.innerHTML='<div class="hp-bar-group"><div class="hb-name">'+self.uid+' <span>'+Math.max(0,myHp)+'/'+myMaxHp+' HP</span></div><div class="hp-bar-outer"><div class="hp-bar-inner" style="width:'+Math.max(0,myHp/myMaxHp*100)+'%"></div></div></div>'
+                +'<div class="hp-bar-group"><div class="hb-name">'+enemyName+' <span>'+Math.max(0,eHp)+'/'+eMaxHp+' HP</span></div><div class="hp-bar-outer"><div class="hp-bar-inner enemy" style="width:'+Math.max(0,eHp/eMaxHp*100)+'%"></div></div></div>';
+        }
+        updateHpBars();
+        log.style.display='block';
+        log.innerHTML='<div class="log-line" style="text-align:center;color:var(--accent);font-family:var(--font-heading);font-size:1rem;padding:.8rem 0">\u2694\uFE0F Las puertas de la Arena de Askelat se abren... \u2694\uFE0F</div>';
+        var actions=[];var round=0;
+        while(myHp>0&&eHp>0&&round<25){
+            round++;
+            var myDmg=Math.max(1,Math.floor(myStats.str*1.5)+Math.floor(Math.random()*5)-1);
+            var dodge=Math.random()*100<enemyStats.agi*2.5;
+            if(!dodge){
+                var crit=Math.random()*100<(myStats.agi+myStats.int)*1.5;
+                if(crit)myDmg=Math.floor(myDmg*2);
+                eHp-=myDmg;
+                actions.push({t:crit?'crit':'hit',m:(crit?'\u2728 ':'\u2694\uFE0F ')+self.uid+' '+(crit?pick(critVerbs):pick(hitVerbs))+' '+enemyName+(crit?'! ':'. ')+'-'+myDmg+' HP',myHp:myHp,eHp:Math.max(0,eHp)});
+            }else{
+                actions.push({t:'miss',m:'\uD83D\uDCA8 '+enemyName+' '+pick(dodgeVerbs)+' '+self.uid+'.',myHp:myHp,eHp:eHp});
+            }
+            if(eHp<=0)break;
+            var eDmg=Math.max(1,Math.floor(enemyStats.str*1.5)+Math.floor(Math.random()*5)-1);
+            var myDodge=Math.random()*100<myStats.agi*2.5;
+            if(!myDodge){
+                var eCrit=Math.random()*100<(enemyStats.agi+enemyStats.int)*1.5;
+                if(eCrit)eDmg=Math.floor(eDmg*2);
+                myHp-=eDmg;
+                actions.push({t:eCrit?'crit':'hit',m:(eCrit?'\u2728 ':'\u2694\uFE0F ')+enemyName+' '+(eCrit?pick(critVerbs):pick(hitVerbs))+' '+self.uid+(eCrit?'! ':'. ')+'-'+eDmg+' HP',myHp:Math.max(0,myHp),eHp:eHp});
+            }else{
+                actions.push({t:'miss',m:'\uD83D\uDCA8 '+self.uid+' '+pick(dodgeVerbs)+' '+enemyName+'.',myHp:myHp,eHp:eHp});
+            }
+        }
+        var won=myHp>0;
+        if(won)actions.push({t:'win',m:pick(winVerbs)+self.uid+' se alza victorioso en la Arena de Askelat!',myHp:myHp,eHp:0});
+        else actions.push({t:'lose',m:pick(loseVerbs)+enemyName+' ha derrotado a '+self.uid+' en la Arena de Askelat.',myHp:0,eHp:eHp});
+        var i=0;
+        function showAction(){
+            if(i>=actions.length){
+                if(won){
+                    var coinR=80+enemyLevel*40;var xpR=60+enemyLevel*25;
+                    self.state.coins+=coinR;self.awardXP(xpR);
+                    log.innerHTML+='<div class="arena-rewards">\u{1F3C6} Victoria en Askelat<br>+'+xpR+' XP \u00b7 +'+coinR+' Oro</div>';
+                }else{
+                    var consolation=15+enemyLevel*5;
+                    self.awardXP(consolation);
+                    log.innerHTML+='<div class="arena-rewards" style="border-color:rgba(192,57,43,.3);background:rgba(192,57,43,.05)">Derrota honorable<br>+'+consolation+' XP por el esfuerzo</div>';
+                }
+                if(!self.state.battleLog)self.state.battleLog=[];
+                self.state.battleLog.unshift({enemy:enemyName,won:won,date:new Date().toLocaleDateString()});
+                if(self.state.battleLog.length>15)self.state.battleLog=self.state.battleLog.slice(0,15);
+                self.save();
+                return;
+            }
+            var a=actions[i];
+            log.innerHTML+='<div class="log-line log-'+a.t+'">'+a.m+'</div>';
+            log.scrollTop=log.scrollHeight;
+            myHp=a.myHp;eHp=a.eHp;
+            hpEl.innerHTML='<div class="hp-bar-group"><div class="hb-name">'+self.uid+' <span>'+Math.max(0,a.myHp)+'/'+myMaxHp+' HP</span></div><div class="hp-bar-outer"><div class="hp-bar-inner" style="width:'+Math.max(0,a.myHp/myMaxHp*100)+'%"></div></div></div>'
+                +'<div class="hp-bar-group"><div class="hb-name">'+enemyName+' <span>'+Math.max(0,a.eHp)+'/'+eMaxHp+' HP</span></div><div class="hp-bar-outer"><div class="hp-bar-inner enemy" style="width:'+Math.max(0,a.eHp/eMaxHp*100)+'%"></div></div></div>';
+            i++;setTimeout(showAction,700);
+        }
+        setTimeout(showAction,1000);
+    }
+    renderBattleHistory(){
+        var c=this.$('arena-history');if(!c)return;
+        var hist=this.state.battleLog||[];
+        if(hist.length===0){c.innerHTML='<p class="empty-state">Las cronicas de batalla estan vacias. Entra a la Arena y forja tu leyenda.</p>';return;}
+        c.innerHTML='';
+        hist.forEach(function(b){
+            var el=document.createElement('div');
+            el.style.cssText='display:flex;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);font-size:.85rem';
+            el.innerHTML='<span>'+(b.won?'<span style="color:var(--accent)">Victoria</span>':'<span style="color:var(--str)">Derrota</span>')+' vs '+b.enemy+'</span><span style="color:var(--text-muted)">'+b.date+'</span>';
+            c.appendChild(el);
+        });
+    }
+    openModal(type){this.currModal=type;this.els.modal.classList.remove('hidden');this.$('modal-title').innerText=type==='habit'?'Nueva Mision':'Nuevo Objetivo';this.$('modal-input-1').focus();}
+    async saveModal(e){e.preventDefault();var v1=this.$('modal-input-1').value,v2=this.$('modal-input-2').value;if(this.currModal==='habit')this.state.habits.push({name:v1,det:v2,done:false});else this.state.goals.push({name:v1,cur:0,target:parseInt(v2)||10});this.els.modal.classList.add('hidden');this.els.modalForm.reset();await this.save();}
+    switchView(v){
+        var self=this;
+        this.els.views.forEach(function(el){el.classList.add('hidden');if(el.id==='view-'+v){el.classList.remove('hidden');el.style.animation='none';el.offsetHeight;el.style.animation=null;}});
+        this.els.nav.forEach(function(el){var a=el.id==='nav-'+v||el.getAttribute('data-view')===v;el.classList.toggle('active',a);});
+        this.renderAll();
+    }
+    async save(onlyLocal){localStorage.setItem('and_data_'+this.uid,JSON.stringify(this.state));this.renderAll();if(!onlyLocal){try{await this.saveRemote();}catch(e){}}}
+    async saveRemote(){await sb.from('warriors').upsert({uid:this.uid,state_json:this.state,updated_at:new Date()});}
+    notify(msg){this.els.toast.innerText=msg;this.els.toast.classList.add('active');setTimeout(function(){app.els.toast.classList.remove('active')},2500);}
+    showXPPop(val){var p=document.createElement('div');p.className='xp-pop-pro';p.innerText='+'+val+' XP';document.body.appendChild(p);setTimeout(function(){p.remove()},800);}
+    updateDate(){var o={weekday:'long',day:'numeric',month:'long'};this.$('current-date').innerText=new Date().toLocaleDateString('es-ES',o).toUpperCase();}
+    getWarriorSkinImg(stateJson){
+        var skinId=stateJson.skin||'caballero1';
+        var skin=this.getSkin(skinId);
+        return skin.img;
+    }
+    getWarriorStats(stateJson){
+        var base=stateJson.stats||{str:1,end:1,int:1,agi:1};
+        var skinId=stateJson.skin||'caballero1';
+        var skin=this.getSkin(skinId);
+        var r={str:base.str||1,end:base.end||1,int:base.int||1,agi:base.agi||1};
+        if(skin.stats)Object.keys(skin.stats).forEach(function(k){r[k]=(r[k]||0)+skin.stats[k]});
+        return r;
+    }
+    async renderLeaderboard(){
+        var c=this.$('leaderboard-list');if(!c)return;var w=[];
+        try{var r=await sb.from('warriors').select('*');if(r.data)w=r.data.sort(function(a,b){return(b.state_json.xp||0)-(a.state_json.xp||0)}).slice(0,10);}catch(e){}
+        c.innerHTML='';
+        if(w.length===0){
+            var st=this.getComputedStats();var sk=this.getSkin(this.state.skin);
+            c.innerHTML='<div class="leader-row current"><div class="leader-rank top1">1</div><img class="leader-avatar" src="'+sk.img+'"><div class="leader-info"><div class="leader-name">'+this.uid+' (Tu)</div><div class="leader-skin">'+sk.name+'</div><div class="leader-stats-row"><span class="leader-stat s-str">FUE '+st.str+'</span><span class="leader-stat s-end">RES '+st.end+'</span><span class="leader-stat s-int">INT '+st.int+'</span><span class="leader-stat s-agi">AGI '+st.agi+'</span></div></div><div class="leader-right"><div class="leader-xp">'+this.state.xp.toLocaleString()+' XP</div><div class="leader-level">Nivel '+this.state.level+'</div></div></div>';
+            return;
+        }
+        var self=this;
+        w.forEach(function(wr,idx){
+            var me=wr.uid===self.uid;
+            var sj=wr.state_json||{};
+            var skinImg=self.getWarriorSkinImg(sj);
+            var skinId=sj.skin||'caballero1';
+            var skinObj=self.getSkin(skinId);
+            var ws=self.getWarriorStats(sj);
+            var lvl=sj.level||1;
+            var xp=sj.xp||0;
+            var rankClass=idx===0?'top1':idx===1?'top2':idx===2?'top3':'';
+            c.innerHTML+='<div class="leader-row '+(me?'current':'')+'">'
+                +'<div class="leader-rank '+rankClass+'">'+(idx+1)+'</div>'
+                +'<img class="leader-avatar" src="'+skinImg+'">'
+                +'<div class="leader-info">'
+                +'<div class="leader-name">'+wr.uid+(me?' (Tu)':'')+'</div>'
+                +'<div class="leader-skin">'+skinObj.name+'</div>'
+                +'<div class="leader-stats-row">'
+                +'<span class="leader-stat s-str">FUE '+ws.str+'</span>'
+                +'<span class="leader-stat s-end">RES '+ws.end+'</span>'
+                +'<span class="leader-stat s-int">INT '+ws.int+'</span>'
+                +'<span class="leader-stat s-agi">AGI '+ws.agi+'</span>'
+                +'</div></div>'
+                +'<div class="leader-right"><div class="leader-xp">'+xp.toLocaleString()+' XP</div><div class="leader-level">Nivel '+lvl+'</div></div>'
+                +'</div>';
+        });
+    }
+    renderChart(){var c=this.$('chart-bars');if(!c)return;c.innerHTML='';this.state.metrics.forEach(function(v){var b=document.createElement('div');b.className='chart-bar-pro';b.style.height=v+'%';c.appendChild(b);});}
+    syncRealtime(){sb.channel('public:warriors').on('postgres_changes',{event:'*',schema:'public',table:'warriors'},function(){app.renderLeaderboard()}).subscribe();}
+}
+var app=new AndradeApp();
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});}
+</script>
+</body>
+</html>
