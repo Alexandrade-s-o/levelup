@@ -506,12 +506,19 @@ class AndradeApp{
         if(!Array.isArray(this.state.transactions))this.state.transactions=[];
         if(this.uid.toLowerCase()==='alex')this.state.coins=999999;
         if(!raw.habits||!raw._loreV2){this.state.habits=def.habits;this.state.goals=def.goals;this.state._loreV2=true;}
-        if(this.state.lastDate!==new Date().toDateString()){this.state.habits.forEach(function(h){h.done=false});this.state.lastDate=new Date().toDateString();this.save(true);}
+        this.checkDailyReset();
+    }
+    checkDailyReset(){
+        if(this.state.lastDate!==new Date().toDateString()){
+            this.state.habits.forEach(function(h){h.done=false});
+            this.state.lastDate=new Date().toDateString();
+            this.save(true);
+        }
     }
     async syncRemoteState(){
         if(!this.uid)return;
         var r=await sb.from('warriors').select('*').eq('uid',this.uid).single();
-        if(r.data){this.state=Object.assign(this.state,r.data.state_json);localStorage.setItem('and_data_'+this.uid,JSON.stringify(this.state));}
+        if(r.data){this.state=Object.assign(this.state,r.data.state_json);localStorage.setItem('and_data_'+this.uid,JSON.stringify(this.state));this.checkDailyReset();}
         else if(r.error&&r.error.code==='PGRST116')await this.saveRemote();
     }
     setupHandlers(){
